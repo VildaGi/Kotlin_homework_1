@@ -83,10 +83,10 @@ fun Order.subtotal(): Double = items.sumOf { it.lineTotal() }
 
 fun Order.total(): Double = subtotal() * (1 - customer.discount)
 
-fun List<Order>.toReceipts(): String = buildString {
-    this@toReceipts.forEachIndexed { index, order ->
+fun List<Order>.toReceipt(): String = buildString {
+    this@toReceipt.forEachIndexed { index, order ->
         append(order.toReceipt())
-        if (index != lastIndex) appendLine("\n${"-".repeat(30)}\n")
+        if (index != this@toReceipt.lastIndex) appendLine("\n${"-".repeat(30)}\n")
     }
 }
 
@@ -157,5 +157,5 @@ fun main() {
         ),
     )
 
-    println(orders.toReceipts())
+    println(orders.toReceipt())
 }
