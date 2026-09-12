@@ -42,10 +42,6 @@ data class Order(
     val status: OrderStatus,
 )
 
-fun Double.toMoney(): String = "%.2f".format(this)
-
-fun Double.toPercent(): String = "${(this * 100).roundToInt()}%"
-
 fun OrderStatus.describe(): String = when (this) {
     is OrderStatus.Created -> "Создан"
     is OrderStatus.Paid -> "Оплачен, транзакция: $transactionId"
@@ -59,12 +55,6 @@ fun Product.displayName(): String = when (category) {
     Category.BOOKS -> "Книга: $name"
     Category.OTHER -> name
 }
-
-fun OrderItem.lineTotal(): Double = product.price * count
-
-fun Order.subtotal(): Double = items.sumOf { it.lineTotal() }
-
-fun Order.total(): Double = subtotal() * (1 - customer.discount)
 
 fun Order.toReceipt(): String = buildString {
     appendLine("Заказ #$id")
@@ -82,6 +72,16 @@ fun Order.toReceipt(): String = buildString {
     }
     appendLine("Итого: ${total().toMoney()}")
 }
+
+fun Double.toMoney(): String = "%.2f".format(this)
+
+fun Double.toPercent(): String = "${(this * 100).roundToInt()}%"
+
+fun OrderItem.lineTotal(): Double = product.price * count
+
+fun Order.subtotal(): Double = items.sumOf { it.lineTotal() }
+
+fun Order.total(): Double = subtotal() * (1 - customer.discount)
 
 fun List<Order>.toReceipts(): String = buildString {
     this@toReceipts.forEachIndexed { index, order ->
